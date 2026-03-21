@@ -1,0 +1,4 @@
+Generics is needed to avoid - [just took an example of list]
+1. Runtime Exception - using generics we get error in compile time which is good.
+2. Manual Casting - without generics, we can store any type of data in the list, but with generics we can define the only type of data we need. Consumer will have a guarantee for the datatype they will be fetching from that list.
+3. Mix of Datatypes in a same list.

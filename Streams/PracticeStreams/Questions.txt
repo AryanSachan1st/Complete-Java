@@ -1,0 +1,55 @@
+Java Streams Practice Set
+
+🟢 Phase 1 — Build Confidence (Easy–Medium)
+
+1. You have a list of integers. Return only those that are divisible by 3, and collect them into a new list.
+
+2. You have a list of employee names. Convert all of them to uppercase and print each one.
+
+3. Given a list of numbers, find the sum of all even numbers in the list.
+You have a list of product prices (doubles). Apply a 10% discount to each and collect the results.
+
+4. A list of strings is given. Filter out all strings that have fewer than 5 characters and count how many remain.
+
+5. You have a list of orders, each with an amount. Find the order with the highest amount.
+
+6. Given a list of integers, remove duplicates and return them in sorted order.
+
+7. You have a list of customer names. Check if any customer's name starts with the letter "A".
+
+8. Given a list of sentences, split every sentence into individual words and collect all words into a single flat list.
+
+9. A list of integers is given. Separate them into two groups — even and odd — using a single stream operation.
+
+10. You have a list of transactions, each with a category and amount. Get the average transaction amount.
+
+11. Given a list of strings, find the first string that contains the word "error" (case-insensitive).
+
+12. You have a list of numbers from 1 to 50 (generate it without hardcoding). Return the sum of squares of the first 5 odd numbers.
+
+13. You have a list of employees with their departments. Group employees by their department name.
+
+14. Given a list of file names, filter only .java files and sort them alphabetically.
+
+
+🔴 Phase 2 — Master Level (Hard)
+
+1. You have a list of orders. Each order has a customer name and a list of items (nested). Flatten all items across all orders and find the most frequently appearing item.
+
+2. A log file gives you a stream of log entries, each with a timestamp and log level (INFO, WARN, ERROR). Count the occurrences of each log level.
+
+3. You have a list of students, each with a list of scores. Compute the average score per student and return a map of student name → average.
+
+4. Given a list of transactions across multiple currencies, convert all amounts to INR using a fixed conversion map, then find the top 3 highest transactions.
+
+5. You have a large list of integers. Using parallel streams, find the count of prime numbers in the list.
+
+6. Given a list of employees with name, department, and salary — find the highest-paid employee in each department.
+
+7. You have a list of sentences. Count the frequency of each word across all sentences combined, and return the top 5 most common words.
+
+8. You have a list of events, each with a start time and end time. Find all events that overlap with a given time window.
+
+9. A company has a list of projects, each with a list of assigned developers. Find developers who are assigned to more than 2 projects simultaneously.
+
+10. Given a stream of raw JSON-like strings (e.g., "id:101,name:Alice,score:88"), parse them into objects on the fly using streams and return the top scorer.

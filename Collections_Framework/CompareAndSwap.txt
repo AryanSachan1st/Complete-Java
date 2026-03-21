@@ -1,0 +1,80 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  COMPARE-AND-SWAP (CAS) — Internal Working, Why It's Used & Characteristics
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHAT IS CAS?
+─────────────
+  CAS is a single, atomic CPU instruction (CMPXCHG on x86) that does THREE
+  things as one indivisible operation:
+    1. Read the current value at a memory address.
+    2. Compare it with an expected value.
+    3. If they match → write a new value. If NOT → do nothing (return false).
+
+  Pseudo-code:
+  ┌────────────────────────────────────────────────────────┐
+  │  bool CAS(address, expectedValue, newValue) {          │
+  │      if (*address == expectedValue) {                  │
+  │          *address = newValue;   // ATOMIC write        │
+  │          return true;           // SUCCESS             │
+  │      }                                                 │
+  │      return false;              // FAILED — retry      │
+  │  }                                                     │
+  └────────────────────────────────────────────────────────┘
+
+HOW IT WORKS INTERNALLY (step-by-step)
+────────────────────────────────────────
+  Scenario: Two threads (T1, T2) both try to increment a shared counter = 5.
+
+  Step 1 → T1 reads counter = 5  (saves as expected = 5)
+  Step 2 → T2 reads counter = 5  (saves as expected = 5)
+
+  Step 3 → T1 fires CAS(counter, expected=5, new=6)
+             CPU checks: memory value (5) == expected (5) ✔
+             → Atomically writes 6. Returns true. T1 ✅
+
+  Step 4 → T2 fires CAS(counter, expected=5, new=6)
+             CPU checks: memory value (6) == expected (5) ✗  ← mismatch!
+             → Does nothing. Returns false. T2 RETRIES.
+
+  Step 5 → T2 re-reads counter = 6, retries CAS(counter, 6, 7) ✅
+
+  This retry loop is called a "spin-loop" or optimistic locking.
+  No thread ever blocks — they just keep retrying until they win.
+
+WHY IS CAS USED? (over synchronized / locks)
+──────────────────────────────────────────────
+  ✔ Lock-free   → No thread is ever suspended/blocked waiting for a mutex.
+  ✔ Faster      → Acquiring a lock = kernel call (expensive). CAS = 1 CPU op.
+  ✔ No deadlock → Since no lock is held, deadlock is impossible.
+  ✔ Scalable    → Multiple threads can progress simultaneously on different CPUs.
+
+  In Java: AtomicInteger, AtomicReference, ConcurrentLinkedQueue,
+           ConcurrentHashMap (bucket-level CAS) — all use CAS internally
+           via sun.misc.Unsafe.compareAndSwapXxx() or VarHandle (Java 9+).
+
+KEY CHARACTERISTICS
+────────────────────
+  ✔ Atomic       — Read + Compare + Write happen as ONE CPU instruction.
+  ✔ Non-blocking — A failing thread RETRIES, never sleeps.
+  ✔ Optimistic   — Assumes no conflict; only checks at write time.
+  ✔ Wait-free*   — In low-contention, every thread finishes in bounded steps.
+  ✗ ABA Problem  — If value changes A→B→A, CAS sees A and wrongly succeeds.
+                   Fix: use AtomicStampedReference (adds a version counter).
+  ✗ High-contention spin — Under heavy conflict, threads retry many times
+                   (wasting CPU cycles). Locks can be better in such cases.
+
+  ABA Problem (briefly):
+    T1 reads A → T2 changes A→B→A → T1's CAS(A, newVal) succeeds wrongly.
+    AtomicStampedReference pairs value + stamp (version), so A/v1 ≠ A/v2.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CAS vs synchronized — Summary
+  ┌─────────────────────┬──────────────────────────────────────┐
+  │ CAS                 │ synchronized                          │
+  ├─────────────────────┼──────────────────────────────────────┤
+  │ CPU instruction     │ OS-level mutex / monitor lock         │
+  │ Non-blocking        │ Blocking (thread waits)               │
+  │ Optimistic          │ Pessimistic                           │
+  │ Best: low contention│ Best: high contention / long ops      │
+  └─────────────────────┴──────────────────────────────────────┘
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
