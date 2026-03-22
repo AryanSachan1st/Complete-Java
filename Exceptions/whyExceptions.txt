@@ -1,0 +1,72 @@
+What are Exceptions?
+ >> Exceptions are runtime errors
+
+Why to Handle Exceptions?
+ >> Exception Handling is a way to handle the runtime errors so that the normal flow of the application can be maintained
+
+Note: If Exceptions are not handled, then code will break at runtime errors, if handled then code will execute for all the other cases where there is no runtime error.
+
+# Hierarchy of Exception
+java.lang.Object
+└── java.lang.Throwable
+    ├── java.lang.Error                          ← Serious JVM-level problems (don't catch these)
+    │   ├── AssertionError
+    │   ├── LinkageError
+    │   │   ├── ClassCircularityError
+    │   │   ├── ClassFormatError
+    │   │   ├── ExceptionInInitializerError
+    │   │   ├── IncompatibleClassChangeError
+    │   │   │   ├── AbstractMethodError
+    │   │   │   ├── IllegalAccessError
+    │   │   │   ├── InstantiationError
+    │   │   │   └── NoSuchMethodError
+    │   │   ├── NoClassDefFoundError
+    │   │   └── UnsatisfiedLinkError
+    │   ├── ThreadDeath
+    │   └── VirtualMachineError
+    │       ├── InternalError
+    │       ├── OutOfMemoryError
+    │       ├── StackOverflowError
+    │       └── UnknownError
+    │
+    └── java.lang.Exception                      ← Must handle (checked or unchecked)
+        ├── CloneNotSupportedException           ← Checked
+        ├── InterruptedException                 ← Checked
+        ├── ReflectiveOperationException         ← Checked
+        │   ├── ClassNotFoundException
+        │   ├── IllegalAccessException
+        │   ├── InstantiationException
+        │   ├── InvocationTargetException
+        │   ├── NoSuchFieldException
+        │   └── NoSuchMethodException
+        ├── IOException                          ← Checked
+        │   ├── FileNotFoundException
+        │   ├── EOFException
+        │   └── SocketException
+        ├── SQLException                         ← Checked
+        │
+        └── RuntimeException                    ← Unchecked (no forced handling)
+            ├── ArithmeticException
+            ├── ArrayIndexOutOfBoundsException
+            │     └── (extends IndexOutOfBoundsException)
+            ├── ClassCastException
+            ├── IllegalArgumentException
+            │   ├── IllegalThreadStateException
+            │   └── NumberFormatException
+            ├── IllegalStateException
+            ├── IndexOutOfBoundsException
+            │   ├── ArrayIndexOutOfBoundsException
+            │   └── StringIndexOutOfBoundsException
+            ├── NegativeArraySizeException
+            ├── NullPointerException
+            ├── SecurityException
+            ├── TypeNotPresentException
+            └── UnsupportedOperationException
+
+Notes-
+>> Throwable is the root of everything — only Throwable (and its subclasses) can be used with throw, throws, and catch.
+>> Error = problems outside your control (e.g., OutOfMemoryError, StackOverflowError)
+>> RuntimeException = programmer mistakes (e.g., NullPointerException, ArithmeticException) — the ones you saw in your Basics.java with division by zero!
+>> We can handle the checked exceptions by writing "throws Exception/Specific Exception" at method signature.
+Ex: public static String getName() throws Exception {...}
+>> Make sure to always close the important connections after work done through finally block. It will make sure that connection will be close irrespective of whatever happened to the code logic
