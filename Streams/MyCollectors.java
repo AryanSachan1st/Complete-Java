@@ -7,7 +7,7 @@ import java.util.stream.*;
 // (List, Set, Map, String, etc.) via Stream.collect(Collector)
 public class MyCollectors {
     public static void main(String[] args) {
-        List<String> names = List.of("Alice", "Bob", "Charlie", "Alice", "Dave");
+        List<String> names = List.of("Aryan", "Chatur", "Charlie", "Siddhi", "Vinayak");
         List<Integer> nums = List.of(3, 7, 1, 9, 4, 2);
 
         // ── Collecting to a List ──────────────────────────────────────────────
@@ -25,17 +25,17 @@ public class MyCollectors {
         // ── Collecting to a Specific Collection ───────────────────────────────
         // toCollection(Supplier) lets you choose any Collection implementation
         // Here we get a sorted, duplicate-free result via TreeSet
-        TreeSet<String> sortedSet = names.stream()
-                .collect(Collectors.toCollection(TreeSet::new));
+        Set<String> sortedSet = names.stream()
+                .collect(Collectors.toCollection(() -> new TreeSet<>()));
         System.out.println("TreeSet (sorted): " + sortedSet);
 
         // ── Joining Strings ───────────────────────────────────────────────────
         // joining(delimiter, prefix, suffix) concatenates all elements into one String
         String joined = names.stream()
-                .collect(Collectors.joining(", ", "[", "]"));
+                .collect(Collectors.joining(", ", "[", "]")); // (mid, start, end)
         System.out.println("Joined: " + joined);
 
-        // ── Summarizing ───────────────────────────────────────────────────────
+        // ── Summarizing ──────────────────────────────────────────────────────
         // summarizingInt returns an IntSummaryStatistics object with:
         // count, sum, min, max, average — all computed in a single pass
         IntSummaryStatistics stats = nums.stream()
@@ -49,16 +49,16 @@ public class MyCollectors {
 
         // ── Grouping Elements — groupingBy ────────────────────────────────────
         // groupingBy(classifier) partitions elements into a Map<K, List<V>>
-        // where the key is the result of applying the classifier function
+        // VIP: where the key is the result of applying the classifier function
 
         // 1) Simple grouping by string length
         Map<Integer, List<String>> byLength = names.stream()
-                .collect(Collectors.groupingBy(String::length));
+                .collect(Collectors.groupingBy(String::length)); // key -> classifier func: string length, val -> all str which produce that length
         System.out.println("Grouped by length: " + byLength);
 
         // 2) Downstream collector: count elements in each group
         Map<Integer, Long> countByLength = names.stream()
-                .collect(Collectors.groupingBy(String::length, Collectors.counting()));
+                .collect(Collectors.groupingBy(String::length, Collectors.counting())); // key -> classifier func: string length, for each key store the count of elements for that key/group
         System.out.println("Count by length: " + countByLength);
 
         // 3) Collecting into a TreeMap so keys are sorted
@@ -68,7 +68,7 @@ public class MyCollectors {
 
         // 4) Joining within each group
         Map<Integer, String> joinedByLength = names.stream()
-                .collect(Collectors.groupingBy(String::length, Collectors.joining(", ")));
+                .collect(Collectors.groupingBy(String::length, Collectors.joining(", "))); // for every group, join the elements by ', '
         System.out.println("Joined by length: " + joinedByLength);
 
         // ── Partitioning Elements ─────────────────────────────────────────────
@@ -86,12 +86,13 @@ public class MyCollectors {
         Map<Integer, List<String>> mappedGroup = names.stream()
                 .collect(Collectors.groupingBy(
                         String::length,
-                        Collectors.mapping(String::toUpperCase, Collectors.toList())
+                        Collectors.mapping(String::toUpperCase, Collectors.toList()) // uppercase each key and put every element of that group in a list
                 ));
         System.out.println("Mapped grouping: " + mappedGroup);
 
         // toMap, ex used: create a map where key = element, value = element.length 
-        List<String> fruits = Arrays.asList("Cherry", "Banana", "Mango", "Apple");
+        List<String> fruits = Arrays.asList("Cherry", "Banana", "Mango", "Apple", "Banana", "Cherry");
+
         Map<String, Integer> map =  fruits.stream().collect(Collectors.toMap(k -> k.toLowerCase(), v -> v.length(), (oldCount, currCount) -> oldCount + currCount)); // .toMap(key, value, function to handle duplicates becz, keys can not have dupes)
         System.out.println(map);
     }

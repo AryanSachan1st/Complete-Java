@@ -38,8 +38,8 @@ public class MyStreamTerminalOps {
 
         // Collectors.joining() ---> concatenates stream elements into a single String
         String joined = names.stream()
-            .collect(Collectors.joining(", ", "[", "]")); // [Aryan, Kushal, Sheetal, Kanika]
-        System.out.println(joined);
+        .collect(Collectors.joining(", ", "[", "]")); // (mid, start, end)
+        System.out.println(joined); // [Aryan, Kushal, Sheetal, Kanika]
 
         // Collectors.groupingBy() ---> groups elements by a classifier into a Map<K, List<V>>
         Map<Integer, List<String>> byLength = names.stream()
@@ -48,7 +48,7 @@ public class MyStreamTerminalOps {
 
         // Collectors.toMap() ---> collects into a Map<K, V> using key and value mappers
         Map<String, Integer> nameLengths = names.stream()
-            .collect(Collectors.toMap(s -> s, String::length));
+            .collect(Collectors.toMap(s -> s, String::length)); // throws error if duplicate keys exists
         System.out.println(nameLengths); // {Aryan=5, Kushal=6, Sheetal=7, Kanika=6}
 
         // .reduce() ---> combines elements into a single value using an accumulator
@@ -65,8 +65,8 @@ public class MyStreamTerminalOps {
         Optional<Integer> max = list.stream().max((a, b) -> Integer.compare(a, b)); // Optional[6]
         System.out.println(min.get() + " " + max.get());
         // The rule is simple: .min() with a reversed comparator gives you the max, and vice versa.
+        // Note: trick to remember it: min will take the 1st value, max will take the last value. So if you sort it in ascending order: (1st -> min and last -> max)
 
-        // NOTE: reversing the comparator in min/max does NOT sort the stream.
         // .sorted() is an intermediate op that reorders the WHOLE stream (unlike min/max which return ONE element)
         List<Integer> asc  = list.stream().sorted().toList();                          // [1, 2, 3, 4, 5, 6]
         List<Integer> desc = list.stream().sorted((a, b) -> Integer.compare(b, a)).toList(); // [6, 5, 4, 3, 2, 1]

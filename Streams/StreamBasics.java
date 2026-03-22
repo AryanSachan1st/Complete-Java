@@ -12,6 +12,7 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 /*
+Prerequisites to learn Streams: Java basics and Collection Framework
 Java 8 introduces --> minimal code, functional programming, lambda expressions, Streams, Date and Time API
 Note: lambda functions can only be used to implement functional interfaces
 */
@@ -76,8 +77,9 @@ public class StreamBasics {
         int doubledAsciiCodeOf_a = findAscii.andThen(doubleIt).apply('A'); // logic1.andThen(logic2).apply(arg)
         System.out.println("Doubled Ascii of A: " + doubledAsciiCodeOf_a);
 
+        // returns the same data which is passed as parameter
         Function<Integer, Integer> identityOF = Function.identity();
-        System.out.println("Identity of 24: " + identityOF.apply(24));
+        System.out.println("Identity of 24: " + identityOF.apply(24)); // returns 24
 
         // Consumer<T>: takes T arg, but returns void (nothing)
         Consumer<List<String>> display = list -> {
@@ -85,7 +87,7 @@ public class StreamBasics {
                 System.out.print(name + " ");
             }
         };
-        display.accept(List.of("aryan", "nikhil", "vipul"));
+        display.accept(List.of("aryan", "aditi", "vipul"));
         System.out.println();
 
         // Supplier<T>: takes nothing, but returns T
@@ -99,7 +101,7 @@ public class StreamBasics {
         System.out.println(getRandomNumber.get());
 
         // BiPredicate<T, U> (takes T, U returns boolean), BiConsumer<T, U> (takes T, U returns nothing), BiFunction<T, U, R> (takes T, U returns R)
-        // if BinaryOperator<T> (takes T, T returns T, short-hand)
+        // BinaryOperator<T> (takes T, T returns T, short-hand)
         BiPredicate<Integer, Set<Integer>> isExistsInSet = (x, hashSet) -> {
             return hashSet.contains(x);
         };
@@ -121,6 +123,5 @@ public class StreamBasics {
         List<MobilePhone> phones = names.stream().map(MobilePhone::new).collect(Collectors.toList()); // (class::new)
 
         phones.forEach(phone -> System.out.println(phone.getName()));
-        System.out.println();
     }
 }

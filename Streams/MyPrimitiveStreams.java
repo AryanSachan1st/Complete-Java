@@ -7,7 +7,17 @@ import java.util.OptionalInt;
 import java.util.stream.*;
 
 // Primitive Streams: IntStream, LongStream, DoubleStream
+// Boxing: Wrapping primitives in their respective classes
+// Unboxing: Unwrap those from their class back to promitives
 // Why? Avoid boxing/unboxing overhead of Stream<Integer> / Stream<Double>.
+/* Example:-
+   The Problem with Stream<Integer>
+   java
+   // Stream<Integer> — every int gets BOXED into an Integer object
+   // Stream<Integer> stream = Stream.of(1, 2, 3, 4, 5);
+   // stream.mapToInt(x -> x)   // UNBOXING happens here to get the int back .sum();
+   // OVERHEAD: Additional Heap Memory Allocation, Garbage Collection pressure, Extra CPU Cycles
+*/
 // Each has its own specialised terminal ops (sum, average, etc.)
 public class MyPrimitiveStreams {
     public static void main(String[] args) {
@@ -20,16 +30,18 @@ public class MyPrimitiveStreams {
         // range(start, end)       → [start, end)   exclusive upper bound
         // rangeClosed(start, end) → [start, end]   inclusive upper bound
 
+        // Optional<Integer>, OptionalInt --> optional because they may or may not hold (null) some value, they prevent from NULLPOINTER Exceptions
+
         System.out.print("range 1..5 : ");
         IntStream.range(1, 6).forEach(n -> System.out.print(n + " "));
         System.out.println();
 
         // ── Important terminal operations ─────────────────────────────────────
-        int sum     = IntStream.rangeClosed(1, 5).sum();               // 15
-        OptionalDouble avg = IntStream.rangeClosed(1, 5).average();   // 3.0
-        OptionalInt  max  = IntStream.rangeClosed(1, 5).max();        // 5
-        OptionalInt  min  = IntStream.rangeClosed(1, 5).min();        // 1
-        long count        = IntStream.rangeClosed(1, 5).count();      // 5
+        int sum = IntStream.rangeClosed(1, 5).sum(); // 15
+        OptionalDouble avg = IntStream.rangeClosed(1, 5).average(); // 3.0
+        OptionalInt max = IntStream.rangeClosed(1, 5).max(); // 5
+        OptionalInt min = IntStream.rangeClosed(1, 5).min(); // 1
+        long count = IntStream.rangeClosed(1, 5).count(); // 5
 
         System.out.println("sum=" + sum + " avg=" + avg.getAsDouble()
                 + " max=" + max.getAsInt() + " min=" + min.getAsInt()
@@ -50,9 +62,18 @@ public class MyPrimitiveStreams {
         // ── mapToObj — IntStream → Stream<T> ─────────────────────────────────
         // Use when you want to produce objects from ints (e.g. strings)
         List<String> labels = IntStream.rangeClosed(1, 3)
-                .mapToObj(i -> "Item-" + i)       // IntStream → Stream<String>
+                .mapToObj(i -> "Item-" + i) // IntStream → Object of String, so we have to use .mapToObj()
                 .collect(Collectors.toList());
         System.out.println("Labels: " + labels);  // [Item-1, Item-2, Item-3]
+        /* VIP-
+        IntStream.of(1, 2, 3)
+        .map(i -> i * 2)            // ✅ int → int       stays IntStream
+        .mapToLong(i -> i * 100L)   // ✅ int → long      becomes LongStream
+        .mapToDouble(i -> i / 2.0)  // ✅ int → double    becomes DoubleStream
+
+        IntStream.of(1, 2, 3)
+        .mapToObj(i -> "Item-" + i) // ✅ int → Object    becomes Stream<String>
+        */
 
         // ── Conversions between primitive streams ─────────────────────────────
         // asLongStream()   → IntStream → LongStream  (widening, no data loss)
@@ -60,7 +81,7 @@ public class MyPrimitiveStreams {
         LongStream   longs   = IntStream.of(1, 2, 3).asLongStream();
         DoubleStream doubles = IntStream.of(1, 2, 3).asDoubleStream();
 
-        System.out.println("LongStream sum   : " + longs.sum());    // 6
+        System.out.println("LongStream sum   : " + longs.sum()); // 6
         System.out.println("DoubleStream avg : " + doubles.average().getAsDouble()); // 2.0
 
         // ── DoubleStream ──────────────────────────────────────────────────────
@@ -79,8 +100,8 @@ public class MyPrimitiveStreams {
         System.out.println();
 
         // ── flatMapToInt — flatten nested arrays into one IntStream ───────────
-        List<int[]> arrays = List.of(new int[]{1, 2}, new int[]{3, 4});
-        int flatSum = arrays.stream()
+        List<int[]> list2 = List.of(new int[]{1, 2}, new int[]{3, 4});
+        int flatSum = list2.stream()
                 .flatMapToInt(IntStream::of)  // Stream<int[]> → IntStream
                 .sum();
         System.out.println("flatMapToInt sum: " + flatSum); // 10

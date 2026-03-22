@@ -7,29 +7,30 @@ Java Streams Practice Set
 2. You have a list of employee names. Convert all of them to uppercase and print each one.
 
 3. Given a list of numbers, find the sum of all even numbers in the list.
-You have a list of product prices (doubles). Apply a 10% discount to each and collect the results.
 
-4. A list of strings is given. Filter out all strings that have fewer than 5 characters and count how many remain.
+4. You have a list of product prices (doubles). Apply a 10% discount to each and collect the results.
 
-5. You have a list of orders, each with an amount. Find the order with the highest amount.
+5. A list of strings is given. Filter out all strings that have fewer than 5 characters and count how many remain.
 
-6. Given a list of integers, remove duplicates and return them in sorted order.
+6. You have a list of orders, each with an amount. Find the order with the highest amount.
 
-7. You have a list of customer names. Check if any customer's name starts with the letter "A".
+7. Given a list of integers, remove duplicates and return them in sorted order.
 
-8. Given a list of sentences, split every sentence into individual words and collect all words into a single flat list.
+8. You have a list of customer names. Check if any customer's name starts with the letter "A".
 
-9. A list of integers is given. Separate them into two groups — even and odd — using a single stream operation.
+9. Given a list of sentences, split every sentence into individual words and collect all words into a single flat list.
 
-10. You have a list of transactions, each with a category and amount. Get the average transaction amount.
+10. A list of integers is given. Separate them into two groups — even and odd — using a single stream operation.
 
-11. Given a list of strings, find the first string that contains the word "error" (case-insensitive).
+11. You have a list of transactions, each with a category and amount. Get the average transaction amount.
 
-12. You have a list of numbers from 1 to 50 (generate it without hardcoding). Return the sum of squares of the first 5 odd numbers.
+12. Given a list of strings, find the first string that contains the word "error" (case-insensitive).
 
-13. You have a list of employees with their departments. Group employees by their department name.
+13. You have a list of numbers from 1 to 50 (generate it without hardcoding). Return the sum of squares of the first 5 odd numbers.
 
-14. Given a list of file names, filter only .java files and sort them alphabetically.
+14. You have a list of employees with their departments. Group employees by their department name.
+
+15. Given a list of file names, filter only .java files and sort them alphabetically.
 
 
 🔴 Phase 2 — Master Level (Hard)

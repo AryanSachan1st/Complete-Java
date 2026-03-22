@@ -21,6 +21,7 @@ public class MyStreamCreation {
     public static void main(String[] args) {
         List<Integer> list = Arrays.asList(1, 3, 4, 5);
 
+        // just an illustration of the flow (we will discuss each part in subsequent classes)
         long totalOdds = list.stream().filter(num -> num % 2 != 0).count(); // 1 liner
         System.out.println(totalOdds);
 
@@ -44,7 +45,7 @@ public class MyStreamCreation {
         System.out.println("Stream.generate(Supplier).limit(num): " + stream4);
 
         // using Stream.iterate(seed, Function [UnaryOperator])
-        Stream<Integer> stream5 = Stream.iterate(1, x -> x + 1).limit(50);
+        Stream<Integer> stream5 = Stream.iterate(1, x -> x + 1).limit(50); // total 50 items
         System.out.println("Stream.iterate(): " + stream5);
     }
 }

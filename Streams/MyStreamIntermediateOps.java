@@ -17,16 +17,16 @@ Important Points to Remember
 public class MyStreamIntermediateOps {
     public static void main(String[] args) {
 
-        // filter
+        // filter (takes a Predicate and put those values in the stream which follows (returns True) the Predicate Logic)
         List<Integer> list = Arrays.asList(1, 2, 3, 1, 4, 5, 6);
         Stream<Integer> stream1 = list.stream().filter(num -> num % 2 == 0); // no exec
         long evens = stream1.count(); // executed here (.count() --> terminal func)
         System.out.println(evens);
 
-        // map
+        // map (takes a Function and convert each element in something else)
         List<String> names = Arrays.asList("Aryan", "Kushal", "Sheetal", "Kushal", "Kanika");
         @SuppressWarnings("unused")
-        Stream<String> stream2 = names.stream().map(String::toUpperCase);
+        Stream<String> stream2 = names.stream().map(String::toUpperCase); // will not execm becz no terminal function is called
 
         // .sorted() --> sorts in natural order
         @SuppressWarnings("unused")
@@ -71,12 +71,13 @@ public class MyStreamIntermediateOps {
 
         // .peek() ---> like map but for side-effects (debugging); returns the same stream
         // useful to inspect elements mid-pipeline without consuming the stream
-        @SuppressWarnings("unused")
-        Stream<Integer> stream9 = list.stream()
+        // @SuppressWarnings("unused")
+        List<Integer> list9 = list.stream()
             .filter(n -> n % 2 == 0)
             .peek(n -> System.out.println("After filter: " + n)) // [2, 4, 6]
-            .map(n -> n * 10);
-        // peek does NOT execute until a terminal op is called (lazy)
+            .map(n -> n * 10)
+            .toList();
+        System.out.println("After map: " + list9);
 
         // .mapToInt() / .mapToLong() / .mapToDouble()
         // ---> converts Stream<T> to primitive specialised IntStream/LongStream/DoubleStream
@@ -84,7 +85,7 @@ public class MyStreamIntermediateOps {
         int total = list.stream().mapToInt(Integer::intValue).sum(); // 22
         System.out.println(total);
 
-        double avg = list.stream().mapToDouble(Integer::doubleValue).average().orElse(0); // ~3.14
+        double avg = list.stream().mapToDouble(Integer::doubleValue).average().orElse(0); // if average is empty, return 0
         System.out.println(avg);
 
         // .takeWhile(predicate) ---> keeps elements while predicate is true, stops at first false

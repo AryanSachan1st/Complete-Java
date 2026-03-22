@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 >> A type of stream that enables parallel processing of elements
 >> Allowing multiple threads to process different parts of the stream simultaneously
 >> This can significantly improve performance for larger datasets
->> Workload is distributed across datasets 
+>> Workload is distributed across datasets
 */
 
 public class MyParallelStream {
@@ -35,7 +35,5 @@ public class MyParallelStream {
         factorialList = counting.parallelStream().map(MyParallelStream::factorial).toList();
         endTime = System.currentTimeMillis();
         System.out.println("Total Time spend using parallel stream: " + (endTime - startTime) + "ms");
-        
-
     }
 }
