@@ -1,0 +1,10 @@
+# Reference vs Object -
+>> Reference type -> decides what methods you can call (compile-time check)
+>> Object type -> decides which version of that method runs (runtime - polymorphism)
+Ex: Parent obj = new Child()
+  >> Parent's functions & Child's Implementaion of those functions are allowed
+
+# Parent vs Child (flow of constructor and method calling)-
+>> When a child object is created (Child c = new Child()), the JVM always calls the parent constructor first - even if you don't write super() explicitly, Java inserts it automatically.
+>> (always) Methods follow polymorphism, meaning the overridden version in the child runs.
+>> When a parent object is created (Parent p = new Parent()), only the parent's constructor and methods are involved. The child class doesn't exist in this context.
