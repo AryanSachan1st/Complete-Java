@@ -1,0 +1,58 @@
+# What is a file?
+>> A file is a named collection of data stored persistently on disk. 
+   > "Persistently" is the key word - unlike RAM (which forgets everything when power is off), files survive shutdowns.
+
+# Types of files
+>> Text Files: Store data as human-readable characters. Internally: every character is stored using a character encoding like ASCII or UTF-8
+   > Examples: .txt, .py, .csv, .html, .json
+
+>> Binary Files: Store data as raw bytes — not meant to be human-readable. The bytes only make sense to the specific program that created them.
+   > Examples: .jpg, .mp3, .exe, .pdf, .docx
+   > A JPEG image -> stored as -> FF D8 FF E0 ...  (raw binary bytes)
+
+>> **Don't Miss It**: Both files are just bytes on disk. The difference is interpretation. Text Files are bytes that map to characters. Binary files are bytes that map to something else (pixels, audio samples, etc.)
+
+# File System structure
+The OS uses a File System to organize files - think of it as the warehouse management system that knows exactly which shelf (folder) every box (file) is on.
+
+>> **Don't Miss It**: File System is organised in a tree structure.
+
+/  (root)
+├── home/
+│   └── krishna/
+│       ├── documents/
+│       │   └── notes.txt
+│       └── projects/
+│           └── app.py
+├── etc/
+│   └── config.txt
+└── usr/
+
+Root -> The top of the tree (/ on Linux/Mac, C:\ on Windows)
+Directory (Folder) -> A node in the tree that contains other files/folders
+File -> A leaf node - it holds actual data, not other files
+
+>> **Don't Miss It**: A directory is itself a special file - it stores a table which maps file/folder names -> disk locations (called inodes on Linux). When you "open a folder," the OS reads that table.
+
+# Paths
+>> Absolute Path: It starts from the root - the full address, no ambiguity and it works from anywhere in the system.
+>> Relative Path: It starts from the current working directory (CWD) - where we "are" right now.
+
+>> **Don't Miss It**: Every directory secretly contains two entries -> . (this directory) and .. (parent directory). The OS uses these to resolve relative paths.
+   > Example: cd .. (move to parent directory), ./ (look inside the same directory)
+
+# Metadata
+>> Every file carries data about itself - called metadata and it is stored separately from the file's content.
+   > Example: Filename, extension, size, createdAt, modifiedAt, permissions, etc.
+
+>> **Don't Miss It**: This metadata is stored in that inode (on Linux), MFT record (Windows) [MFT: Master File Table] - a tiny record on disk that exists separately from the file's content. When we rename a file, only the inode's name changes - the actual data blocks on disk aren't touched at all.
+
+# Permissions
+rwx   r-x   r--
+───   ───   ───
+ │     │     └── Others: can only read
+ │     └──── Group: can read & execute
+ └────────── Owner: can read, write, execute
+
+>> On Windows, this is managed through ACLs (Access Control Lists) - same idea, different interface.
+>> On Linux/Mac, permissions look like: rwxr-xr--
