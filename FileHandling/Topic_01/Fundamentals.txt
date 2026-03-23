@@ -28,6 +28,10 @@ The OS uses a File System to organize files - think of it as the warehouse manag
 │   └── config.txt
 └── usr/
 
+>> **Don't Miss It**:  No matter in which subfolder your .java file is, the CWD is almost always the project root when using VS Code or an IDE.
+>> Debug Trick: Print the CWD whenever confused:
+   > System.out.println(new File(".").getAbsolutePath());
+
 Root -> The top of the tree (/ on Linux/Mac, C:\ on Windows)
 Directory (Folder) -> A node in the tree that contains other files/folders
 File -> A leaf node - it holds actual data, not other files

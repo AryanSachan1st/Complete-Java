@@ -1,0 +1,69 @@
+# A text file is just bytes on disc. Java needs to know to things to makes sense:
+ > Where to write/read -> File Path
+ > How to decode bytes -> characters -> Charset (encoding)
+
+>> Reading: bytes -> encode -> characters
+>> Writing: characters -> decode -> bytes
+
+Note: There are 2 eras (APIs) of File I/O in java (old, new)-
+1. Old API-
+ > Package: java.io
+ > Introduced: Java 1.0 (1996)
+ > Key Classes: File, FileReader, Scanner, BufferedReader
+ > Style: Manual Setup
+ > Encoding: Easy to forget (not visible) -> leads to bugs
+2. New API-
+ > Package: java.nio.file
+ > Introduced: Java 7 (2011)
+ > Key Classes: Path, Files
+ > Style: Clean, One-liner methods
+ > Encoding: Explicit, always visible
+
+# Part-1: Reading a text file
+# Method-1: code (refer code file)
+ >> What happens internally:
+  > Java opens the file -> gets a file descriptor from the OS
+  > OS reads all bytes from disk into memory
+  > Java decodes those bytes using UTF-8 -> gives us a String
+  > File is closed automatically
+
+# Method-2: code (refer code file)
+ >> What happens internally:
+  > Java reads the file byte by byte, looking for newline characters (\n or \r\n)
+  > Each chunk between newlines becomes one String in the List
+  > The newline character itself is NOT included in the string - Java strips it for us
+
+# Method-3: BufferedReader through Files, code (refer code file)
+ > It is fast
+ > Use it when file is very large, or processing stream in real time
+ > Note: BufferedReader appears in Topic2 also, it is the same class, The difference is how you create it:
+   > Old way: new BufferedReader(new FileReader(file)) - encoding defaults to platform default (dangerous!)
+   > New way: Files.newBufferedReader(path, UTF_8) - encoding is explicit and safe
+
+# Part-2: Writing to a text file
+ > similar approach, very easy (refer to code files)
+
+# Part-3: Newline Characters
+ > Linux/modern macOS -> \n (bytes: 0x0A): LF (Line Feed)
+ > Windows -> \r\n (bytes: 0x0D 0x0A): CRLF (Carriage Return (back to left most) + Line Feed)
+
+# Part-4: Encoding and Decoding (UTF-8, ASCII, Latin-1)
+ > refer to code file (encoding.java)
+
+# Part-6: BOM (Byte Order Mark) Awareness
+ > BOM is a hidden marker some editors (especially Windows Notepad) write at the very start of a UTF-8 or UTF-16 file.
+ > The problem: Java's standard reader doesn't strip it automatically. So our first line starts with a mysterious \uFEFF character.
+ > What it looks like in bytes: 0xEF 0xBB 0xBF (3 bytes at position 0)
+
+# Quick Reference Summary
+ > Task                               > Best Method
+  Read small file (whole content)       Files.readString(path, UTF_8)
+  Read file as list of lines            Files.readAllLines(path, UTF_8)
+  Read huge file line by line           BufferedReader + readLine()
+  Write string to file                  Files.writeString(path, text, UTF_8)
+  Write lines to file                   Files.write(path, lines, UTF_8)
+  Append to existing file               Add StandardOpenOption.APPEND
+  Write large/streaming                 BufferedWriter + newLine()
+  Handle BOM                            Check startsWith("\uFEFF") and strip Cross-platform newline                System.lineSeparator() or writer.newLine()
+  Safe encoding choice                  Always StandardCharsets.UTF_8
+
