@@ -24,6 +24,6 @@ public class encoding {
 
         // What happens if you use the WRONG encoding?
         // File saved as UTF-8, but you read as Latin-1:
-        // "你" (3 UTF-8 bytes: E4 BD A0) → read as 3 separate Latin-1 chars → "ä½ " (garbled!)
+        // "你" (3 UTF-8 bytes: E4 BD A0) -> read as 3 separate Latin-1 chars -> "ä½ " (garbled!)
     }
 }
