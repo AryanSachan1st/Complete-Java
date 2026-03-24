@@ -1,0 +1,43 @@
+# Exception handling in File handling
+ > This is what separates amateur code from production-ready code.
+
+>> Errors: JVM handles these internally, ex: StackOverFlow Exception, etc
+>> Checked Exceptions: Those exceptions which will be detected during compile time and it is must to handle those.
+>> Unchecked Exceptions: Those exceptions which might crash the application during run time, must to handle it in production ready code.
+
+# Java's Exception Hierarchy for File I/O
+ Throwable
+ └── Exception
+      └── IOException                   ← Parent of all I/O errors
+           ├── FileNotFoundException     ← File doesn't exist
+           ├── EOFException             ← Unexpected end of file
+           └── ... (many more)
+      └── SecurityException            ← Permission denied (Runtime)
+      └── OutOfMemoryError             ← Reading huge files
+
+ Note: IOException is a checked exception. SecurityException is an unchecked exception.
+
+# Some Common examples of File level Exceptions
+1. FileNotFoundException — "File Doesn't Exist"
+ > Internal: When new FileReader("ghost.txt") runs, Java calls the OS to open the file. The OS returns an error code (like ENOENT on Linux). Java wraps this into a FileNotFoundException and throws it.
+
+2. SecurityException — "Permission Denied"
+ > Java's Security Manager checks if the JVM process has read rights on the file before even asking the OS. If our account doesn't own that file and it has no read permission for other owner's file, we will get SecurityException.
+
+ >> Note: Always check both FileNotFoundException AND SecurityException when reading sensitive paths.
+
+3. IO Exception - "Disc Full/Hardware Error"
+ > IOException is the parent of all I/O problems. It catches everything the OS considers an I/O failure.
+
+# Ways to handle the Exceptions
+ > Already implemented in the Exceptions Folder and a lot of times in the earlier topics of File Handling.
+
+Note: Problem with "try_catch_finally" approach: The finally block itself needs a nested try/catch to close resources. It's ugly, error-prone, and verbose. That's why Java 7 introduced the better way: "try_with_resources"
+
+ > try_with_resources: Automatically calls close() on any resource declared inside try(...) when the block exits - whether it succeeds or throws an exception. It works on any class that "implements AutoCloseable" (like FileReader, BufferedReader or Custom Classes, etc.). This eliminates the need for a finally block to manually close resources, preventing memory/resource leaks.
+
+# Some Important Notes-
+1. Catch specific exceptions first before parent class ones (FileNotFoundException before IOException)
+2. Never silently swallow exceptions — always log or inform the user
+3. finally always runs — even if return is called inside try
+4. parent class exception (IOException) is the safety net — catch it last for unexpected errors
