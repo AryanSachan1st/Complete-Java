@@ -1,0 +1,19 @@
+# Reference vs Object -
+>> Reference type -> decides what methods you can call (compile-time check)
+>> Object type -> decides which version of that method runs (runtime - polymorphism)
+Ex: Parent obj = new Child()
+  >> Parent's functions & Child's Implementaion of those functions are allowed
+
+# Parent vs Child (flow of constructor and method calling)-
+>> When a child object is created (Child c = new Child()), the JVM always calls the parent constructor first - even if you don't write super() explicitly, Java inserts it automatically.
+>> (always) Methods follow polymorphism, meaning the overridden version in the child runs.
+>> When a parent object is created (Parent p = new Parent()), only the parent's constructor and methods are involved. The child class doesn't exist in this context.
+
+# Maven vs Gradle
+ > Maven: It is a build automation and dependency management tool that uses an XML file (pom.xml) to automatically download libraries, compile code, run tests, and package Java applications using a fixed project lifecycle.
+ > Gradle: It is a modern build automation tool that uses Groovy/Kotlin scripts (build.gradle) to manage dependencies and builds with more flexibility and faster incremental execution, making it suitable for large and complex projects (and Android development).
+ 
+# Return by value of value V/S Return by value of reference during getters()
+ > If the datatype of the field is primitive or immutable non-primitives (String, Integer, Long, Double, Boolean, Character, etc), then writing "return this.field" is SAFE because they will either return the value, not the reference or they will return value of reference but they are immutable.
+ > If the datatype of the field is non-primitive and mutable (List, int[], Map, Set, Date, StringBuilder, Custom Class, etc) then writing "return this.field" is NOT-SAFE because it will return the copy of the reference and the original data can be modified.
+ Better to return a defensive copy "new FieldClass(this.field)", in this way the caller will receive the same value but a different reference variable pointing to that object, SAFE.
