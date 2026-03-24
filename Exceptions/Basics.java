@@ -93,6 +93,7 @@ public class Basics {
      *   → Means we're propagating these checked exceptions instead of handling them here.
      *   → In production code, you'd handle them gracefully instead of propagating from main.
      */
+    @SuppressWarnings("null")
     public static void main(String[] args) throws IOException, CustomException {
 
         // ── Scenario 1: Custom Exception (Insufficient Balance) ──────────────
