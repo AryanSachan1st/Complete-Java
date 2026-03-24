@@ -1,0 +1,14 @@
+!!FileHandling.Topic_06.YAMLHandling.School
+studentsList:
+- age: 22
+  city: Gurgaon
+  name: Prateek
+- age: 21
+  city: Manglore
+  name: Sneha
+- age: 22
+  city: Hyderabad
+  name: Aaradhya
+- age: 21
+  city: Nasik
+  name: Rudra

@@ -1,0 +1,195 @@
+# What is Serialization?
+ > Imagine we have a Java object living in our RAM - say, a Student object with name, age, and grades. When the program stops, that object dies. Gone. Serialization is a way of converting that object into a format that can be saved to a file, sent over a network, or stored in a database and later brought back to life. [Java object -> File]
+
+# File Formats
+ > Different formats exist because different problems need different tools.
+ > Examples: .csv, .json, .xml, .yaml, .binary/pickle, etc.
+
+ 1. CSV (Comma Separated Values)
+ > Simplest tabular format.
+ > Every row = one record. Every column is separated by a comma. That's it. Dead simple.
+ > how to access csv data (refer code file -> CSVDataHandle.java)
+ > Naiva Approach (may fail if content itself has commas) -> Java BufferedReader Approach
+ > Recommended to use -> OpenCSV Library (will discuss in later chapters)
+ > CSV has no data types -> everything is a string, and **you** decide what to convert.
+
+ 2. JSON (JavaScript Object Notation)
+ > JSON is the universal language of the internet for data exchange. Programming Language doesn't matter -> Java, Python, JavaScript - everyone speaks JSON.
+ > Unlike CSV, JSON **preserves types**. `25` is a number, not a string. `true` is a boolean. This is powerful.
+ > ### JSON Data Types:
+    | Type | Example |
+    |------|---------|
+    | String | `"Ravi"` |
+    | Number | `25`, `3.14` |
+    | Boolean | `true`, `false` |
+    | Array | `[95, 87, 92]` |
+    | Object | `{ "key": "value" }` |
+    | Null | `null` |
+ > Example:
+    {
+    "name": "Ravi",
+    "age": 25,
+    "city": "Chennai",
+    "isStudent": true,
+    "scores": [95, 87, 92],
+    "address": {
+        "street": "Anna Nagar",
+        "pincode": "600040"
+     }
+    }
+ > There are three Ways to Handle JSON in Java-
+    1. Level 1 -> Manual (no library) - painful, [we will not learn this].
+    2. Level 2 -> org.json / Gson - simple, good for beginners
+    3. Level 3 -> Jackson - industry standard, used everywhere 
+   1. Gson (by Google)
+    > Step 1 - Create Our Java Class (POJO), POJO = Plain Old Java Object. Just a regular class with fields. No magic.
+    > Step 2 - Java Object -> JSON (Serialization)
+    > Step 3 - JSON -> Java Object (Deserialization)
+    > Step 4 - List of Objects (Very Common in APIs)
+    > How to use it in your project?
+     Steps-
+      > Step 1 - Download the Gson JAR file from Maven Central (https://mvnrepository.com/artifact/com.google.code.gson/gson) and place it in a "lib/" folder inside your root directory of the project.
+      > Step 2 - Tell your IDE about the JAR by adding "lib/**/*.jar" to your referenced libraries setting (in VS Code: java.project.referencedLibraries in settings.json), so imports are recognized.
+      > Step 3 - When compiling/running from terminal, include the JAR in the classpath using the -cp flag: javac -cp "lib/gson.jar" YourFile.java and java -cp "lib/gson.jar;." YourClass
+   2. Jackson
+    > First, we have to download three JAR files (like we have downloaded one for Gson)
+      > jackson-core: version used (2.18.3.jar)
+      > jackson-databind: version used (2.18.3.jar)
+      > jackson-annotations version used (2.18.3.jar)
+      > Download that version which is best suitable to use in your timeline, but keep all three in same version.
+      > put them in the same "lib/" folder where you have put that Gson JAR file.
+      > When compiling/running from terminal, include all 3 JARs in the classpath using the -cp flag:
+            javac -cp "lib/*" YourFile.java  and  java -cp "lib/*;." YourClass
+
+ 3. XML (Extensible Markup Language)
+  > Widely used in:
+   > 📦 Maven's pom.xml          - project dependencies
+     📱 Android layouts          - UI design files
+     🏢 Enterprise SOAP APIs     - banking, insurance, govt systems
+     ⚙️ Spring config files      - applicationContext.xml
+     📋 Microsoft Office files   - .docx, .xlsx are actually XML inside!
+  > Structure is quite similar to HTML-
+    <?xml version="1.0" encoding="UTF-8"?>   ← Declaration (optional but recommended)
+
+    <school>              - Opening tag  (Root element - only ONE root allowed!)
+       <student id="101">  - Tag with ATTRIBUTE (id="101")
+          <name>Ravi</name>  - Element with text content
+       </student>          - Closing tag
+    </school>             - Root closing tag
+
+  > Ways to parse XML in Java-
+    DOM Parser  - Loads entire XML into memory as a tree    (small files)
+    SAX Parser  - Reads XML line by line, event-driven      (large files)
+    StAX Parser - You control the cursor, pull-based        (modern way)
+    JAXB        - Maps XML directly to Java objects         (cleanest!)
+
+  1. DOM Parser-
+    code: refer DOM code files
+    > DOM loads the entire XML file into RAM as a tree of Node objects. This is why DOM is easy to work with but not suitable for huge files - a 500MB XML file would need 500MB+ of RAM.
+
+  2. JAXB Parser-
+    code: refer JAXB code files
+    > Just like Gson maps JSON <-> Java objects, JAXB maps XML <-> Java objects automatically. JAXB = Java Architecture for XML Binding.
+    > JAR files required to run JAXB-
+     > JAXB API (interfaces & annotations) : jakarta.xml.bind-api-4.0.0.jar
+     > Shared internal utilities : jaxb-core-4.0.0.jar
+     > JAXB implementation (runtime) : jaxb-impl-4.0.0.jar
+     > Activation framework (required by JAXB runtime) : jakarta.activation-api-2.1.3.jar
+    > Download all 4 JARs and place them in the project's lib/ folder.
+
+  > Note: Appending data to an XML file: read complete xml file -> get the root object -> add the new data to root obj -> write complete xml file again.
+
+  > Note: Same concept applies to JSON arrays as well, by the way — Gson/Jackson follow the exact same read → modify → write back pattern for appending.
+
+ 4. YAML (YAML Ain't Markup Language, funny 😅)
+  > YAML is used in-
+   > 🐳 Docker Compose files     - docker-compose.yml
+     ☸️  Kubernetes configs      - deployment.yml
+     🔁 GitHub Actions           - .github/workflows/build.yml
+     ⚙️  Spring Boot             - application.yml
+     📦 Ansible playbooks        - infrastructure automation
+  > YAML was literally designed with one goal - be as human-readable as possible.
+  > YAML Syntax -
+   1. Key Value Pairs [Types are auto-detected — no quotes needed for numbers/booleans]
+    > example: 
+     name: Ravi
+     age: 25
+     city: Chennai
+     isStudent: true
+     salary: 45000.50
+     nothing: null 
+   2.  Nested Objects (indentation = nesting)
+    > example:
+      student:
+         name: Ravi
+         age: 25
+         address:
+            street: Anna Nagar
+            pincode: 600040
+   3. Lists
+    > example:
+      # Style 1: block style (recommended)
+      scores:
+      - 95
+      - 87
+      - 92
+
+      # Style 2: inline style
+      scores: [95, 87, 92]
+   4. List of Objects
+    > example:
+      students:
+       - name: Ravi
+          age: 25
+          city: Chennai
+       - name: Priya
+          age: 22
+          city: Mumbai
+       - name: Kumar
+          age: 28
+          city: Delhi
+   5. Multiline Strings
+    > example:
+      # '|' preserves newlines (literal block)
+       description: |
+        This is line one.
+        This is line two.
+        This is line three.
+
+      # '>' folds newlines into spaces (folded block)
+       summary: >
+        This long sentence will be
+        joined into one single line.
+
+   > Note: For indentation, YAML uses spaces only, tabs will throw error.
+   > Reading and Writing in YAML (SnakeYAML)
+   > code: refer YAML code files
+   > Java has no built-in YAML support. The most popular library is SnakeYAML.
+   > Note: SnakeYAML 2.x Security Restriction - Global Tags -
+    > When SnakeYAML writes a Java object to YAML, it stamps a global tag on top of the file like:
+        !!FileHandling.Topic_06.YAMLHandling.School
+    > This tag tells SnakeYAML which Java class to instantiate when reading back.
+    > BUT - SnakeYAML 2.x (released after CVE-2022-1471) blocks reading such tags by default, as a security
+      measure to prevent malicious YAML from instantiating arbitrary Java classes (remote code execution risk).
+    > Fix: Provide a TagInspector whitelist in LoaderOptions that explicitly allows only your own package's classes-
+        LoaderOptions loaderOptions = new LoaderOptions();
+        TagInspector tagInspector = (Tag tag) -> tag.getClassName().startsWith("your.package.path");
+        loaderOptions.setTagInspector(tagInspector);
+        Yaml yaml = new Yaml(new Constructor(clazz, loaderOptions));
+    > This is safer than blindly enabling all tags — you only permit classes YOU control.
+
+   > Note: SnakeYAML requires Setters (Java Bean Convention) -
+    > SnakeYAML's Representer (writer) discovers which fields to serialize using the Java Bean convention:
+      it looks for matching getter + setter pairs (e.g., getName() + setName()).
+    > If a field only has a getter but NO setter, SnakeYAML treats it as read-only and SKIPS it during
+      serialization -> the field is written as an empty {} block in the YAML file.
+    > Fix: Always provide both getters AND setters for all fields you want SnakeYAML to serialize/deserialize.
+    > Note: The no-arg constructor is also MANDATORY for SnakeYAML to instantiate the object while reading.
+    > Summary of requirements for a SnakeYAML-compatible class-
+        1. No-arg constructor      (for deserialization - object creation)
+        2. Setters for all fields  (for serialization - writing field values)
+        3. Getters for all fields  (for deserialization - reading field values)
+    > Note: Serialize = Java Objext -> File
+            Deserialize = File -> Java Object
+
+# END

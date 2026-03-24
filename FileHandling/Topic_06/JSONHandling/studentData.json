@@ -1,0 +1,21 @@
+[ {
+  "name" : "KamalJeet",
+  "city" : "Jhansi",
+  "age" : 21,
+  "scores" : [ 85, 92, 90 ]
+}, {
+  "name" : "IndraJeet",
+  "city" : "Haridwar",
+  "age" : 22,
+  "scores" : [ 75, 82, 92 ]
+}, {
+  "name" : "Satya",
+  "city" : "Kolkata",
+  "age" : 22,
+  "scores" : [ 85, 72, 80 ]
+}, {
+  "name" : "Srikant",
+  "city" : "Lucknow",
+  "age" : 21,
+  "scores" : [ 75, 92, 85 ]
+} ]

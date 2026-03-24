@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<school>
+    <student id="100" name="Ritik" age="22" city="Udaipur"/>
+    <student id="103" name="Sanskriti" age="21" city="Rishikesh"/>
+    <student id="101" name="Karishma" age="22" city="Patna"/>
+    <student id="105" name="Kushagra" age="22" city="Kanpur"/>
+    <student id="102" name="R Sai Sudarshan" age="21" city="Chennai"/>
+</school>
