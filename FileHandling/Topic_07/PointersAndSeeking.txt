@@ -1,0 +1,21 @@
+# File Pointers and Seeking
+ > Our file has a cursor, starts from 0 (top-left most corner). Whenever we read or write something, the cursor moves forward.
+ > RandomAccessFile (class that gives full cursor control) [jump anywhere]
+  > code: refer the code files in Topic_07
+  > Internal Working: When we call seek(), Java doesn't physically move any bytes. It just updates a number stored in memory - the current file offset. When the next read() or write() happens, the OS uses that number to tell the disk head exactly where to go. This is why seeking is fast - it's just changing an integer.
+  > When to use it?
+   > Reading record #5000 in a binary database -> Skip directly to byte 5000 × recordSize - no scanning.
+   > ...other similar use cases also.
+  > Key Takeaways-
+   > The file pointer is a cursor - a number tracking your current byte position.
+   > getFilePointer() -> tells you where you are.
+   > seek(n) -> jumps to any byte position instantly.
+   > seek(0) -> is what "rewind" means in Java.
+   > RandomAccessFile is the class that enables all of this - unlike stream-based readers, it's built for jumping around.
+
+# Important question: When to use: BufferedReader/Writer and RandomAccessFile?
+ > With BufferedReader/Writer, the reading and writing goes in one direction. We can not jump to any random pointer back and forward. So use it for sequential access of data.
+ > With RandomAccessFile, we can jump and skip the non-required data to save time. So use it when we need random access of data.
+ > Note: Never use both techniques in same file, because they modify the content w.r.t. their own cursors, and it may lead to data inconsistency.
+
+# END
